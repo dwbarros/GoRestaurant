@@ -15,7 +15,7 @@ class Modal extends Component {
     const { isOpen } = this.props;
 
     if (prevProps.isOpen !== isOpen) {
-      console.log(this.props)
+      // console.log(this.props)
       this.setState({ modalStatus: isOpen })
     }
   }
