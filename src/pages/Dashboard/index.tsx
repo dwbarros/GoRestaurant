@@ -7,14 +7,15 @@ import ModalAddFood from '../../components/ModalAddFood';
 import ModalEditFood from '../../components/ModalEditFood';
 import { FoodsContainer } from './styles';
 
-interface FoodItem {
-  id: number,
-  name: string,
-  description: string,
-  price: number,
-  available: boolean,
-  image: string
-};
+
+ interface FoodItem {
+  id: number;
+  name: string;
+  image: string;
+  price: number;
+  description: string;
+  available: boolean;
+}
 
 interface FoodCards {
   foods: FoodItem[],
@@ -23,7 +24,8 @@ interface FoodCards {
   editModalOpen: boolean,
 };
 
-function Dashboard() {
+
+export default function Dashboard() {
   const [foodCards, setFoodCards] = useState<FoodCards>({
     foods: [],
     editingFood: {
@@ -40,19 +42,18 @@ function Dashboard() {
 
 
   useEffect(() => {
-    async function loadProducts() {
-      const response = await api.get('/foods');
+    async function loadProducts(): Promise<void> {
+      const response = await api.get('foods');
 
       setFoodCards({ ...foodCards, foods: response.data });
     }
 
     loadProducts();
 
-  },[]);
+  },[foodCards]);
 
 
-  const handleAddFood = async (food: FoodItem) => {
-
+  const handleAddFood = async (food: FoodItem): Promise<void> => {
     try {
       const response = await api.post('/foods', {
         ...food,
@@ -69,7 +70,7 @@ function Dashboard() {
     }
   }
 
-  const handleUpdateFood = async (food: FoodItem) => {
+  const handleUpdateFood = async (food: FoodItem): Promise<void> => {
 
     try {
       const foodUpdated = await api.put(
@@ -96,6 +97,10 @@ function Dashboard() {
     setFoodCards({ ...foodCards, foods: foodsFiltered });
   }
 
+  const handleEditFood = (food: FoodItem) => {
+    setFoodCards({ ...foodCards, editingFood: food, editModalOpen: true });
+  }
+  
   const toggleModal = () => {
     const isModalOpen = foodCards.modalOpen;
     setFoodCards({ ...foodCards, modalOpen: !isModalOpen });
@@ -106,9 +111,6 @@ function Dashboard() {
     setFoodCards({ ...foodCards, editModalOpen: !isModalOpen });
   }
 
-  const handleEditFood = (food: FoodItem) => {
-    setFoodCards({ ...foodCards, editingFood: food, editModalOpen: true });
-  }
 
   return (
     <>
@@ -139,5 +141,3 @@ function Dashboard() {
     </>
   );
 };
-
-export default Dashboard;
