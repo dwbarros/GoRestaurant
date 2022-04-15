@@ -1,45 +1,39 @@
-import { useRef, useCallback } from 'react';
-
+import { useRef } from 'react';
 import { FiCheckSquare } from 'react-icons/fi';
-import { FormHandles } from '@unform/core';
 import { Form } from './styles';
 import Modal from '../Modal';
 import Input from '../Input';
 
 
-interface FoodItem {
+interface FoodData {
   id: number;
   name: string;
-  image: string;
-  price: number;
   description: string;
+  price: number;
+  image: string;
   available: boolean;
 }
 
-interface ModalProps {
+interface ModalEditFoodProps {
   isOpen: boolean;
+  editingFood: FoodData;
   setIsOpen: () => void;
-  handleUpdateFood: (food: FoodItem) => Promise<void>;
-  editingFood: FoodItem;
+  handleUpdateFood: (food: FoodData) => Promise<void>;
 }
 
 
-export default function ModalEditFood ({
+export default function ModalEditFood({
   isOpen,
   setIsOpen,
   editingFood,
-  handleUpdateFood,
-}: ModalProps) {
-  
-  const formRef = useRef<FormHandles>(null);
+  handleUpdateFood
+}: ModalEditFoodProps) {
+  const formRef = useRef(null);
 
-  const handleSubmit = useCallback(
-    async (data: FoodItem) => {
-      handleUpdateFood(data);
-      setIsOpen();
-    },
-    [handleUpdateFood, setIsOpen],
-  );
+  async function handleSubmit(data: FoodData) {
+    handleUpdateFood(data);
+    setIsOpen();
+  };
 
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
